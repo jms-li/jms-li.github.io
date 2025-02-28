@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>3D PDB Viewer</title>
+  <!-- Load jQuery and 3Dmol.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://3Dmol.org/build/3Dmol-min.js"></script>
+  <style>
+    body { margin: 0; padding: 0; }
+    #viewer-container {
+      width: 100vw;
+      height: 100vh;
+      background-color: #EEEEEE;
+    }
+  </style>
+</head>
+<body>
+  <div id="viewer-container"></div>
+  <script>
+    $(document).ready(function(){
+      // Select the container div and initialize the viewer configuration.
+      let container = $("#viewer-container");
+      let config = { backgroundColor: "lightgray" };
+      
+      // Create the 3Dmol.js viewer.
+      let viewer = $3Dmol.createViewer(container, config);
+      
+      // URL of the online PDB file (change this to any valid PDB file URL).
+      let pdbUri = 'https://files.rcsb.org/download/6fga.pdb';
+      
+      // Use AJAX to load the PDB file.
+      $.ajax(pdbUri, {
+        success: function(data) {
+          // Add the model from the loaded PDB data
+          viewer.addModel(data, "pdb");
+          // Apply a cartoon style with a spectrum color scheme.
+          viewer.setStyle({}, { cartoon: { color: 'spectrum' } });
+          // Zoom into the structure.
+          viewer.zoomTo();
+          // Render the scene.
+          viewer.render();
+        },
+        error: function(xhr, status, error) {
+          console.error("Failed to load PDB file: " + error);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
