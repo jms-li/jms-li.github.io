@@ -35,40 +35,42 @@
     </select>
   </div>
   
-  <div id="viewer-container"></div>
-  <script>
-    let viewer;
-
-    function loadPDB(pdbUri) {
-      viewer.removeAllModels();
-
-      $.ajax({
-        url: pdbUri,
-        success: function(data) {
-          viewer.addModel(data, "pdb");
-          viewer.setStyle({}, { cartoon: { color: 'spectrum' } });
-          viewer.zoomTo();
-          viewer.render();
-        },
-        error: function(xhr, status, error) {
-          console.error("Failed to load PDB file: " + error);
-        }
+  <div id="viewer-container">
+    <script>
+      let viewer;
+  
+      function loadPDB(pdbUri) {
+        viewer.removeAllModels();
+  
+        $.ajax({
+          url: pdbUri,
+          success: function(data) {
+            viewer.addModel(data, "pdb");
+            viewer.setStyle({}, { cartoon: { color: 'spectrum' } });
+            viewer.zoomTo();
+            viewer.render();
+          },
+          error: function(xhr, status, error) {
+            console.error("Failed to load PDB file: " + error);
+          }
+        });
+      }
+  
+      $(document).ready(function(){
+        // Select the container div and initialize the viewer configuration.
+        let container = $("#viewer-container");
+        let config = { backgroundColor: "lightgray" };
+        viewer = $3Dmol.createViewer(container, config);
+  
+        loadPDB($("#pdbSelect").val());
+  
+        $("pdbSelect").change(function(){
+          let selectedUri = $(this).val();
+          loadPDB(selectedUri);
+        });
       });
-    }
+    </script>
+  </div>
 
-    $(document).ready(function(){
-      // Select the container div and initialize the viewer configuration.
-      let container = $("#viewer-container");
-      let config = { backgroundColor: "lightgray" };
-      viewer = $3Dmol.createViewer(container, config);
-
-      loadPDB($("#pdbSelect").val());
-
-      $("pdbSelect").change(function(){
-        let selectedUri = $(this).val();
-        loadPDB(selectedUri);
-      });
-    });
-  </script>
 </body>
 </html>
