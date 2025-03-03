@@ -8,42 +8,65 @@
   <script src="https://3Dmol.org/build/3Dmol-min.js"></script>
   <style>
     body { margin: 0; padding: 0; }
+    #menu-container{
+      width: 100vw;
+      height: 10vh;
+      background-color: #CCCCCC;
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      box-sizing: border-box;
+    }
     #viewer-container {
       width: 100vw;
       height: 100vh;
-      background-color: #EEEEEE;
+      background-color: #202020;
     }
   </style>
 </head>
 <body>
+  <div id="menu-container">
+    <label for="pdbSelect">Protein:</label>
+    <select id="pdbSelect" style="margin-left: 10px;">
+      <option value="https://files.rcsb.org/download/6fga.pdb">TRIM21</option>
+      <option value="https://files.rcsb.org/download/1YCR.pdb">1YCR</option>
+      <option value="https://files.rcsb.org/download/4HHB.pdb">4HHB</option>
+      <option value="https://files.rcsb.org/download/2HYY.pdb">2HYY</option>
+    </select>
+  </div>
+  
   <div id="viewer-container"></div>
   <script>
-    $(document).ready(function(){
-      // Select the container div and initialize the viewer configuration.
-      let container = $("#viewer-container");
-      let config = { backgroundColor: "lightgray" };
-      
-      // Create the 3Dmol.js viewer.
-      let viewer = $3Dmol.createViewer(container, config);
-      
-      // URL of the online PDB file (change this to any valid PDB file URL).
-      let pdbUri = 'https://files.rcsb.org/download/6fga.pdb';
-      
-      // Use AJAX to load the PDB file.
-      $.ajax(pdbUri, {
+    let viewer;
+
+    function loadPDB(pdbUri) {
+      viewer.removeAllModels();
+
+      $.ajax({
+        url: pdbUri,
         success: function(data) {
-          // Add the model from the loaded PDB data
-          viewer.addModel(data, "pdb");
-          // Apply a cartoon style with a spectrum color scheme.
+          view.addModel(data, "pdb");
           viewer.setStyle({}, { cartoon: { color: 'spectrum' } });
-          // Zoom into the structure.
           viewer.zoomTo();
-          // Render the scene.
           viewer.render();
         },
         error: function(xhr, status, error) {
           console.error("Failed to load PDB file: " + error);
         }
+      });
+    }
+
+    $(document).ready(function(){
+      // Select the container div and initialize the viewer configuration.
+      let container = $("#viewer-container");
+      let config = { backgroundColor: "lightgray" };
+      viewer = $3Dmol.createViewer(container, config);
+
+      loadPDB($("#pdbSelect").val());
+
+      $("pdbSelect").change(function(){
+        let selectedUri = $(this).val();
+        loadPDB(selectedUri);
       });
     });
   </script>
