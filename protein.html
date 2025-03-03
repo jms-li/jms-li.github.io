@@ -40,9 +40,9 @@
     <label for="pdbSelect">Protein:</label>
     <select id="pdbSelect" style="margin-left: 10px;">
       <option value="https://files.rcsb.org/download/6fga.pdb">TRIM21</option>
-      <option value="https://files.rcsb.org/download/1YCR.pdb">1YCR</option>
-      <option value="https://files.rcsb.org/download/4HHB.pdb">4HHB</option>
-      <option value="https://files.rcsb.org/download/2HYY.pdb">2HYY</option>
+      <option value="https://files.rcsb.org/download/1YCR.pdb">MDM2</option>
+      <option value="https://files.rcsb.org/download/4HHB.pdb">HBA1</option>
+      <option value="https://files.rcsb.org/download/2HYY.pdb">ABL1</option>
     </select>
   </div>
   
@@ -75,7 +75,7 @@
   
         loadPDB($("#pdbSelect").val());
   
-        $("pdbSelect").change(function(){
+        $("#pdbSelect").on("change", function(){
           let selectedUri = $(this).val();
           loadPDB(selectedUri);
         });
