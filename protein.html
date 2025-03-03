@@ -17,7 +17,7 @@
     #menu-container{
       width: 100vw;
       height: 10vh;
-      background-color: #CCCCCC;
+      background-color: #202020;
       display: flex;
       align-items: center;
       justify-content: flex-start;
@@ -57,7 +57,7 @@
           url: pdbUri,
           success: function(data) {
             viewer.addModel(data, "pdb");
-            viewer.setStyle({}, { cartoon: { color: 'spectrum' } });
+            viewer.setStyle({}, { line: { color: 'spectrum' } });
             viewer.zoomTo();
             viewer.render();
           },
@@ -70,7 +70,7 @@
       $(document).ready(function(){
         // Select the container div and initialize the viewer configuration.
         let container = $("#viewer-container");
-        let config = { backgroundColor: "lightgray" };
+        let config = { backgroundColor: "black" };
         viewer = $3Dmol.createViewer(container, config);
   
         loadPDB($("#pdbSelect").val());
