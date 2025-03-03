@@ -45,7 +45,7 @@
       $.ajax({
         url: pdbUri,
         success: function(data) {
-          view.addModel(data, "pdb");
+          viewer.addModel(data, "pdb");
           viewer.setStyle({}, { cartoon: { color: 'spectrum' } });
           viewer.zoomTo();
           viewer.render();
