@@ -7,6 +7,8 @@ let scene = null;
 const centerX = Math.floor((window.innerWidth-800)/2);
 const centerY = Math.floor((window.innerHeight-600)/2);
 
+
+
 function make_environment(...envs) {
     return new Proxy(envs, {
         get(target, prop, receiver) {
@@ -70,7 +72,12 @@ async function instantiateWasmScene() {
         scene.wasmTrinket.instance.exports.updatedef();
         const image = new ImageData(new Uint8ClampedArray(scene.buffer, scene.pixels, 800*600*4), 800);
         ctx.putImageData(image, centerX, centerY);
-
+        // testing images, will probably change how this is done later
+        const testimage = new Image();
+        testimage.src = 'torus0.png';
+        testimage.onload = function() {
+            ctx.drawImage(testimage, 100, 300);
+        };
         window.requestAnimationFrame(step);
     }
     window.requestAnimationFrame(step);
