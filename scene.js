@@ -1,9 +1,11 @@
 let app = document.getElementById("app");
-app.width = 800;
-app.height = 600;
+app.width = window.innerWidth;
+app.height = window.innerHeight;
 let ctx = app.getContext("2d");
 let w = null;
 let scene = null;
+const centerX = Math.floor((window.innerWidth-800)/2);
+const centerY = Math.floor((window.innerHeight-600)/2);
 
 function make_environment(...envs) {
     return new Proxy(envs, {
@@ -66,8 +68,8 @@ async function instantiateWasmScene() {
     function step(timestamp) {
         scene.wasmTrinket.instance.exports.implement_input();
         scene.wasmTrinket.instance.exports.updatedef();
-        const image = new ImageData(new Uint8ClampedArray(scene.buffer, scene.pixels, app.width*app.height*4), app.width);
-        ctx.putImageData(image, 0, 0);
+        const image = new ImageData(new Uint8ClampedArray(scene.buffer, scene.pixels, 800*600*4), 800);
+        ctx.putImageData(image, centerX, centerY);
 
         window.requestAnimationFrame(step);
     }
