@@ -8,7 +8,6 @@ const centerX = Math.floor((window.innerWidth-800)/2);
 const centerY = Math.floor((window.innerHeight-600)/2);
 
 
-
 function make_environment(...envs) {
     return new Proxy(envs, {
         get(target, prop, receiver) {
@@ -48,7 +47,8 @@ async function instantiateWasmScene() {
     const keyStateAddr = wasmTrinket.instance.exports.key_states.value;
     wasmTrinket.instance.exports.main();
     const pixels = wasmTrinket.instance.exports.dst;
-    const scene = { wasmTrinket, buffer, keyStateAddr, pixels };
+    const torus_pixels = wasmTrinket.instance.exports.torus_image_data;
+    const scene = { wasmTrinket, buffer, keyStateAddr, pixels, torus_pixels };
     return scene;
 }
 
@@ -71,13 +71,15 @@ async function instantiateWasmScene() {
         scene.wasmTrinket.instance.exports.implement_input();
         scene.wasmTrinket.instance.exports.updatedef();
         const image = new ImageData(new Uint8ClampedArray(scene.buffer, scene.pixels, 800*600*4), 800);
+        const torus_image = new ImageData(new Uint8ClampedArray(scene.buffer, scene.torus_pixels, 200*100*4), 200);
         ctx.putImageData(image, centerX, centerY);
+        ctx.putImageData(torus_image, 0, 0);
         // testing images, will probably change how this is done later
-        const testimage = new Image();
-        testimage.src = 'torus0.png';
-        testimage.onload = function() {
-            ctx.drawImage(testimage, 100, 300);
-        };
+        //const testimage = new Image();
+        //testimage.src = 'torus0.png';
+        //testimage.onload = function() {
+           // ctx.drawImage(testimage, 100, 300);
+       // };
         window.requestAnimationFrame(step);
     }
     window.requestAnimationFrame(step);
